@@ -1,18 +1,22 @@
+import javax.swing.DefaultListModel;
+
 public class Message {
 	private String id;
 	private String passwd;
 	private String msg;
 	private String type;
-	private String check;
+	private String rcvid;
+	private DefaultListModel<String> check;
 	private int people;
 	
 	public Message() {}
 	
-	public Message(String id, String passwd, String msg, String type, String check, int people){
+	public Message(String id, String passwd, String msg, String type, String rcvid, DefaultListModel<String> check, int people){
 		this.id = id;
 		this.passwd = passwd;
 		this.msg = msg;
 		this.type = type;
+		this.rcvid = rcvid;
 		this.check = check;
 		this.people = people;
 	}
@@ -45,10 +49,17 @@ public class Message {
 		this.type = type;
 	}
 	
-	public String getCheck() {
+	public String getRcvid() {
+		return rcvid;
+	}
+	public void setRcvid(String rcvid) {
+		this.rcvid = rcvid;
+	}
+	
+	public DefaultListModel<String> getCheck() {
 		return check;
 	}
-	public void setCheck(String check) {
+	public void setCheck(DefaultListModel<String> check) {
 		this.check = check;
 	}
 	

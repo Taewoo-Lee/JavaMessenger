@@ -1,11 +1,5 @@
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -13,6 +7,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Container;
+
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -20,8 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
-public class MultiChatUI extends JFrame
-{
+public class MultiChatUII {
+
 	private JPanel contentPane;
 	
 	protected JLabel chatLabel;
@@ -51,17 +51,36 @@ public class MultiChatUI extends JFrame
 	
 	protected static String id;
 	
-	public MultiChatUI()
-	{
-		super(" 멀티챗 ☆.。.:*・°☆.。.:*・°☆.。.:*・°☆.。.:*・°☆");
-		init();
-		this.setResizable(false);
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MultiChatUII window = new MultiChatUII();
+					//window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-	
-	private void init()
-	{
+
+	/**
+	 * Create the application.
+	 */
+	public MultiChatUII() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 510, 378);
+		setBounds(100, 100, 508, 358);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(230, 230, 250));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -69,7 +88,7 @@ public class MultiChatUI extends JFrame
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane1 = new JScrollPane(c_msgOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane1.setBounds(12, 27, 338, 273);
+		scrollPane1.setBounds(12, 27, 338, 253);
 		contentPane.add(scrollPane1);
 		
 		c_msgOut = new JTextArea();
@@ -87,13 +106,13 @@ public class MultiChatUI extends JFrame
 		
 		msgInput = new JTextField();
 		msgInput.setFont(new Font("a시네마M", Font.PLAIN, 12));
-		msgInput.setBounds(12, 313, 277, 21); // y=288
+		msgInput.setBounds(12, 313, 277, 21);
 		contentPane.add(msgInput);
 		msgInput.setColumns(10);
 		
 		sendButton = new JButton("전송");
 		sendButton.setFont(new Font("a시네마M", Font.PLAIN, 12));
-		sendButton.setBounds(289, 312, 61, 23); //y=287
+		sendButton.setBounds(289, 312, 61, 23);
 		contentPane.add(sendButton);
 		
 		userLabel = new JLabel(" ~ 사용자 ~\r\n");
@@ -159,11 +178,10 @@ public class MultiChatUI extends JFrame
 		nameOut.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		scrollpane2.setViewportView(nameOut);
 		
-		secretRadio = new JRadioButton("귓속말");
-		secretRadio.setFont(new Font("a시네마M", Font.PLAIN, 12));
-		secretRadio.setBackground(new Color(230, 230, 250));
-		secretRadio.setBounds(374, 240, 116, 23);
-		contentPane.add(secretRadio);
+//		secretRadio = new JRadioButton("귓속말");
+//		secretRadio.setFont(new Font("a시네마M", Font.PLAIN, 12));
+//		contactLabel.setBounds(374, 200, 77, 15);
+//		contentPane.add(secretRadio);
 		
 		exitButton = new JButton("종료");
 		exitButton.setFont(new Font("a시네마M", Font.PLAIN, 12));
@@ -175,35 +193,44 @@ public class MultiChatUI extends JFrame
 		deleteButton.setBounds(374, 282, 116, 23);
 		contentPane.add(deleteButton);
 		
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("귓속말");
+		rdbtnNewRadioButton.setBackground(new Color(230, 230, 250));
+		rdbtnNewRadioButton.setBounds(374, 240, 116, 23);
+		contentPane.add(rdbtnNewRadioButton);
+		
 		cardLayout.show(tab, "login");
 		
 		setResizable(false);
 		setVisible(true);  // true여야 화면에 보임.
 	}
-	
-	public void addButtonActionListener(ActionListener listener)
-	{
-		loginButton.addActionListener(listener);
-		logoutButton.addActionListener(listener);
-		sendButton.addActionListener(listener);
-		deleteButton.addActionListener(listener);
-		exitButton.addActionListener(listener);
-	}
-	
-	public void addEnterKeyListener(KeyListener listener)
-	{
-		idInput.addKeyListener(listener);
-		loginButton.addKeyListener(listener);
-		logoutButton.addKeyListener(listener);
-		msgInput.addKeyListener(listener);
-		sendButton.addKeyListener(listener);
-		deleteButton.addKeyListener(listener);
-		exitButton.addKeyListener(listener);
-	}
-	
-	public void addButtonWindowListenr(WindowListener listener)
-	{
-		this.addWindowListener(listener);
+
+	private void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		
 	}
 
+	private void setResizable(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void add(Container tab2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void setDefaultCloseOperation(int exitOnClose) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void setBounds(int i, int j, int k, int l) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void setContentPane(JPanel contentPane2) {
+		// TODO Auto-generated method stub
+		
+	}
 }

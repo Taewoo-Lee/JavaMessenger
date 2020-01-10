@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -36,12 +37,16 @@ public class MultiChatServer extends JFrame implements ActionListener
 	
 	ArrayList<String> userList = new ArrayList<String>();
 	HashSet hs = new HashSet();
+	ArrayList<String> tmpList = new ArrayList<String>();
+	DefaultListModel<String> user;
+	int people = 0;
 	
 	MultiChatServer()  // 생성자 
 	{
-		super("모든걸 볼수있는 서버야");
+		super("Server");
 		init();  // 화면 구성 메소드
 		buttons();  // 액션리스너 설정 메소드
+		this.setResizable(false);
 	}
 	
 	private void init() 
@@ -53,21 +58,23 @@ public class MultiChatServer extends JFrame implements ActionListener
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane(s_msgOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBounds(12, 10, 281, 256);
+		JScrollPane scrollPane = new JScrollPane(s_msgOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(18, 15, 281, 256);
 		contentPane.add(scrollPane);
 		
 		scrollPane.setViewportView(s_msgOut);
 		s_msgOut.setFont(new Font("a시네마M", Font.PLAIN, 13));
 		s_msgOut.setForeground(Color.WHITE);
 		s_msgOut.setBackground(new Color(153, 153, 102));
-		s_msgOut.append(" ~ 사용자 접속 무한 대기중 ~ \n");
+		s_msgOut.setLineWrap(true); // 줄바꿈 ok
+		s_msgOut.setWrapStyleWord(true); // 단어 단위 줄바꿈 ok
+		s_msgOut.append(" ~ 서버 실행중 ~ \n");
 		
-		startButton.setBounds(22, 279, 115, 33);
+		startButton.setBounds(28, 285, 115, 33);
 		startButton.setFont(new Font("a시네마M", Font.PLAIN, 14));
 		contentPane.add(startButton);
 		
-		stopButton.setBounds(165, 279, 115, 33);
+		stopButton.setBounds(173, 285, 115, 33);
 		stopButton.setFont(new Font("a시네마M", Font.PLAIN, 14));
 		contentPane.add(stopButton);
 		
@@ -101,12 +108,11 @@ public class MultiChatServer extends JFrame implements ActionListener
 		logger = Logger.getLogger(this.getClass().getName());
 		
 		try {
-			ss = new ServerSocket(12345);  // 5111 포트 사용
+			ss = new ServerSocket(12345);  // 12345 포트 사용
 			logger.info("MultiChatServer start");
 			
 			while (true) {
 				s = ss.accept();
-				s_msgOut.append(" ~ 사용자 접속 무한 대기중 ~ \n");
 				
 				ChatThread chat = new ChatThread();
 				chatThreads.add(chat);
@@ -126,31 +132,35 @@ public class MultiChatServer extends JFrame implements ActionListener
 			ct.outMsg.println(msg);
 		}
 	}
+	void msgSendWho(String msg, int send, int rcv) {
+		ChatThread ct = chatThreads.get(rcv);
+		ct.outMsg.println(msg);
+		ct = chatThreads.get(send);
+		ct.outMsg.println(msg);
+	}
 
 	// 각각의 클라이언트 관리를 위한 쓰레드 클래스
 	class ChatThread extends Thread //1개의 스레드에서는 1개의 일만 처리할 수 있다.
 	{
 		// 수신 메시지 및 파싱 메시지 처리를 위한 변수 선언
-				String msg;
+		String msg;
 
-		        // 메시지 객체 생성
-				Message m = new Message();
+        // 메시지 객체 생성
+		Message m = new Message();
 
-		        // Json Parser 초기화
-				Gson gson = new Gson();
-				//Sample Message {"id":"user1","passwd":"1234","msg":"hahaha","type":"msg"};
+        // Json Parser 초기화
+		Gson gson = new Gson();
 
-				// 입출력 스트림
-				private BufferedReader inMsg = null;
-				private PrintWriter outMsg = null;
-		
+		// 입출력 스트림
+		private BufferedReader inMsg = null;
+		private PrintWriter outMsg = null;
+
 		public void run()  // 스레드에서 처리할 일을 기재한다
 		{
 			boolean status = true;
 			logger.info("ChatThread start...");
 			
-			try
-			{
+			try {
 				// 입출력 스트림 생성
 				inMsg = new BufferedReader(new InputStreamReader(s.getInputStream()));
 				outMsg = new PrintWriter(s.getOutputStream(),true);
@@ -166,21 +176,22 @@ public class MultiChatServer extends JFrame implements ActionListener
 												
 					// 파싱된 문자열 배열의 두번째 요소 값에 따라 처리
 					// 로그아웃 메시지 인 경우
-					if(m.getType().equals("logout")) {
+					if(m.getType().equals("logout"))
+					{
+						tmpList.remove(m.getId());
+						user = new DefaultListModel<>();
+						for(int i=0; i<tmpList.size(); i++) {
+							user.add(i, tmpList.get(i));
+						}
+						
 						userList.remove(m.getId());
 						hs.remove(m.getId());
 						chatThreads.remove(this);
 						
-						
-						String user = "";
-						int people = 0;
-						for(int i=0; i<userList.size(); i++) {
-							user = user+userList.get(i)+"\n";
-						}
 						people = userList.size();
 						
 						s_msgOut.append("사용자 "+m.getId()+" 로그아웃했습니다.\n");
-						msgSendAll(gson.toJson(new Message(m.getId(),"","님이 종료했습니다.","server", user, people)));
+						msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그아웃했습니다.","server", "all", user, people)));
 						// 해당 클라이언트 스레드 종료로 인해 status 를 false 로 설정
 						status = false;
 					}
@@ -188,28 +199,37 @@ public class MultiChatServer extends JFrame implements ActionListener
 					// 로그인 메시지 인 경우
 					else if(m.getType().equals("login"))
 					{
+						tmpList.add(people, m.getId());
+						user = new DefaultListModel<>();
+						for(int i=0; i<tmpList.size(); i++) {
+							user.add(i, tmpList.get(i));
+						}  
+						
 						userList.add(m.getId());
 						hs.addAll(userList);
 						userList.clear();
 						userList.addAll(hs);
 						
+						people = userList.size();
 						
-						String user = "";
-						int people = 0;
-						for(int i=0; i<userList.size(); i++) {
-							user += userList.get(i)+"\n";
-						}
-						people  = userList.size();
-						
+						msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그인했습니다.","server", "all", user, people)));
+						System.out.println(msg);
 						s_msgOut.append("사용자 "+m.getId()+" 로그인했습니다.\n");
-						msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그인했습니다.","server", user, people)));
+					}
+					else if(m.getType().equals("secret"))
+					{
+						int numS = user.indexOf(m.getId());
+						int numR = user.indexOf(m.getRcvid());
+						System.out.println("numS : "+numS+"\tnumR : "+numR);
+						msgSendWho(gson.toJson(new Message(m.getId(),"", m.getMsg(),"s_secret", m.getRcvid(), user, people)), numS, numR);
+						System.out.println(msg);
+						s_msgOut.append("(귓속말)" + m.getId() + "→" + m.getRcvid() + " : " + m.getMsg()+"\n");
 					}
 					// 그밖의 경우 즉 일반 메시지인 경우
 					else
 					{
 						msgSendAll(msg);
-						s_msgOut.append(m.getId()+": "+m.getMsg()+"\n");
-						System.out.println(m.getType());
+						s_msgOut.append(m.getId() + " : " + m.getMsg() + "\n");
 					}
 				}
 				// 루프를 벗어나면 클라이언트 연결 종료 이므로 스레드 인터럽트
