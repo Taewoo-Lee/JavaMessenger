@@ -4,14 +4,47 @@
 &nbsp;물론 대규모 사용자를 고려한 서버 프로그램이라면 안정성과 성능 등 요소를 충족해야 하므로 책에서 배운 소켓 프로그래밍 수준 이상의 네트워크 프로그래밍 기술이 요구된다. 여기서는 지금까지 배운 기본적인 네트워크, 입출력, 스레드, GUI, 자료구조 등 프로그래밍 기술을 총동원해서 다중 클라이언트를 지원하는 멀티 채팅 서버와 클라이언트를 구현할 것이다.<br>
 
 &nbsp;이 자바 메신저는 JUST JAVA(황희정 지음, 한빛아카데미) 책을 바탕으로 하고 있다.
-
 <br>
 
+# 목차
+1. [자바 메신저](#자바-메신저(java-messenger))
+2. [환경 구축](#환경-구축)
+    
+    2.1 [JDK 설치](#jdk-설치)
+
+    2.2 [이클립스란?](#eclipse)
+
+    2.3 [이클립스 환경 설정](#이클립스-환경-설정)
+
+    2.4 [윈도우빌더](#window-builder)
+3. [프로젝트](#프로젝트)
+
+    3.1 [기본구조](#기본-구조)
+
+    3.2 [기능정의](#기능-정의)
+
+    3.3 [GUI](#gui-mock-up)
+
+    3.4 [JSON 설치](#json-라이브러리-설치)
+4. [클래스 설계](#클래스-설계)
+
+    4.1 [MultiChatServer](#multichatserver.java)
+
+	4.2 [MultiChatData](#multichatdata.java-(model-class))
+
+	4.3 [MultiChatUI](#multichatui.java-(view-class))
+
+	4.4 [MultiChatController](#multichatcontroller.java-(controller-class))
+    
+	4.5 [Message](#message.java)
+5. [실행 환경](#실행-환경)
+6. [실행 결과](#실행-결과)
+
 # 환경 구축
-&nbsp;자바 프로그램을 개발하려면 기본적으로 자바 가상머신과 컴파일러, 라이브러리, 런처, 디버거 등 여러 요소로 구성된 JDK(Java Devlopment Kit)가 필요하다. <br>JDK만으로 소스 컴파일과 실행이 가능하지만 소스 편집과 관리, 컴파일, 실행, 라이브러리 고나리 등을 간편하게 하려면 통합 개발 환경이 필요하다. <br>이클립스는 대표적인 자바 개발 환경이다.
+&nbsp;자바 프로그램을 개발하려면 기본적으로 자바 가상머신과 컴파일러, 라이브러리, 런처, 디버거 등 여러 요소로 구성된 JDK(Java Devlopment Kit)가 필요하다. JDK만으로 소스 컴파일과 실행이 가능하지만 소스 편집과 관리, 컴파일, 실행, 라이브러리 고나리 등을 간편하게 하려면 통합 개발 환경이 필요하다. 이클립스는 대표적인 자바 개발 환경이다.
 
 ## JDK 설치
-&nbsp;단순하게 자바 프로그램을 실행하는 데 JDK가 아닌 JRE만 있어도 충분하다. 또한 컴퓨터 사양에 별다른 제한은 없지만, 원활하게 사용하려면 최소 1GB 이상의 램을 확보하는 것이 좋다.<br>
+&nbsp;단순하게 자바 프로그램을 실행하는 데 JDK가 아닌 JRE만 있어도 충분하다.<br>또한 컴퓨터 사양에 별다른 제한은 없지만, 원활하게 사용하려면 최소 1GB 이상의 램을 확보하는 것이 좋다.<br>
 1. developer.oracle.com 접속 후 `Downloads > Java SE`
 
 	<img src="https://user-images.githubusercontent.com/41332126/72773972-4588dd80-3c4c-11ea-9b37-857fc0347ca3.png" width=630>
@@ -43,40 +76,40 @@
 <br>
 
 ## Eclipse
-&nbsp;자바는 Sun Microsystems에서 개발한 프로그래밍 언어로 태양(sun)과 관련 있는 식(蝕), 개기일식을 의미하는 이클립스를 이름으로 지었다.<br>
-이클립스는 Windows, Mac OS X 및 Linux와 같은 주요 운영 체제 어디에서든 제한 없이 사용이 가능하다 보니 다양한 플랫폼의 소프트웨어 개발에 쓰이고 있다.
+&nbsp;자바는 Sun Microsystems에서 개발한 프로그래밍 언어로 태양(sun)과 관련 있는 식(蝕), 개기일식을 의미하는 이클립스를 이름으로 지었다. 이클립스는 Windows, Mac OS X 및 Linux와 같은 주요 운영 체제 어디에서든 제한 없이 사용이 가능하다 보니 다양한 플랫폼의 소프트웨어 개발에 쓰이고 있다.
 
 <img src="https://dora-guide.com/wp-content/uploads/2019/10/eclipse-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-%EC%9D%B4%ED%81%B4%EB%A6%BD%EC%8A%A4-%EC%84%A4%EC%B9%98.png.webp" height=150>
-<br><br>
+
+<br>
 
 ## 이클립스 설치
 > 설치가이드 www.eclipse.org/downloads/packages/installer
-1. www.eclipse.org/downloads 접속 후 `Download 64 bit`
+1. eclipse.org/downloads 접속 후 `Download 64 bit`
 
-    <img src="https://user-images.githubusercontent.com/41332126/72130055-b8c46100-33bb-11ea-8f6c-f149ae6c62f5.png" height=200>
+    <img src="https://user-images.githubusercontent.com/41332126/72130055-b8c46100-33bb-11ea-8f6c-f149ae6c62f5.png" height=240>
 2. `Download` eclipse-inst-win64.exe
 
-    <img src="https://user-images.githubusercontent.com/41332126/72130197-1789da80-33bc-11ea-973a-4719cbb934dd.png" height=150>
+    <img src="https://user-images.githubusercontent.com/41332126/72130197-1789da80-33bc-11ea-973a-4719cbb934dd.png" height=190>
 3. 개발 목적에 따라 다양한 IDE들을 설치할 수 있다.<br>
 자바 개발을 하기 위해 **`Eclipse IDE for java Developers`** 를 클릭하여 다운로드.<br>
 아래 설치 파일들은 필요한 경우 나중에 플러그인을 통해 다른 기능도 설치할 수 있다.
 
-    <img src="https://user-images.githubusercontent.com/41332126/72131742-7b160700-33c0-11ea-8d27-f42b8d3ad464.png" height=450>
+    <img src="https://user-images.githubusercontent.com/41332126/72131742-7b160700-33c0-11ea-8d27-f42b8d3ad464.png" width=500>
 4. `INSTALL` 기본 경로로 설치를 계속한다. 설치 경로를 따로 지정할 수도 있다.<br>
 아래 두 옵션은 사용자 편의에 따라 임의대로 지정한다.
 - Create start menu entry : 시작 메뉴에 추가하기
 - Create desktop shortcut : 바탕화면에 바로가기 만들기
 
-    <img src="https://user-images.githubusercontent.com/41332126/72132173-a77e5300-33c1-11ea-8a64-8218f890edf6.png" height=450>
+    <img src="https://user-images.githubusercontent.com/41332126/72132173-a77e5300-33c1-11ea-8a64-8218f890edf6.png" width=500>
 5. 움프(Oomph) 라이센스 동의. `체크 후 Accept`<br>움프라 하는 새로운 프로젝트는 IDE를 좀 더 쉽게 설치할 수 있게 하고 프로젝트 공간을 프로비저닝한다.
 
-    <img src="https://user-images.githubusercontent.com/41332126/72133051-e2818600-33c3-11ea-9618-0d759de8e000.png" height=400>
+    <img src="https://user-images.githubusercontent.com/41332126/72133051-e2818600-33c3-11ea-9618-0d759de8e000.png" height=450>
 6. 인증서 동의. `Select All 후 Accept selected`
 
-    <img src="https://user-images.githubusercontent.com/41332126/72134163-a00d7880-33c6-11ea-89ba-8249b3cb5bba.png" height=450>
+    <img src="https://user-images.githubusercontent.com/41332126/72134163-a00d7880-33c6-11ea-89ba-8249b3cb5bba.png" height=480>
 7. `LAUNCH` 
 
-    <img src="https://user-images.githubusercontent.com/41332126/72134541-b9fb8b00-33c7-11ea-9cf5-03bac6e29db5.png" height=450>
+    <img src="https://user-images.githubusercontent.com/41332126/72134541-b9fb8b00-33c7-11ea-9cf5-03bac6e29db5.png" width=500>
 <br>
 
 
@@ -84,79 +117,79 @@
 1. `Launch` 기본 경로로 연다. 작업 경로를 따로 지정할 수도 있다.
 - Use this as the default and do not ask again : 경로를 고정하고 이 팝업창을 다시 띄우지 않기
 
-    <img src="https://user-images.githubusercontent.com/41332126/72135201-40fd3300-33c9-11ea-9105-91e855b86358.png" height=230>
+    <img src="https://user-images.githubusercontent.com/41332126/72135201-40fd3300-33c9-11ea-9105-91e855b86358.png" height=250>
 2. Welcome 창을 닫거나 Workbench를 클릭하여 작업을 시작한다.
 - Always show Welcome at start up : 프로그램 시작 시 항상 Welcome 창 띄우기
 
-    <img src="https://dora-guide.com/wp-content/uploads/2019/10/10.png" height=450>
+    <img src="https://dora-guide.com/wp-content/uploads/2019/10/10.png" height=500>
 
 ### 프로젝트 다운로드
 3. 현재 깃허브 페이지에 업로드돼있는 파일을 Git Bash에서 `clone 주소` 하거나 `Download ZIP`을 통해 원하는 드라이브 경로에 저장한 후 압축을 풀어준다. github.com/taeyoung98/JavaMessenger
 
-    <img src="https://user-images.githubusercontent.com/41332126/72137801-cf27e800-33ce-11ea-9ee8-9d5a680a6a03.png" height=350>
+    <img src="https://user-images.githubusercontent.com/41332126/72137801-cf27e800-33ce-11ea-9ee8-9d5a680a6a03.png" height=420>
 4. 다시 이클립스로 돌아와서 File > Open Projects form File System...
 5. `Directory` 를 위에서 파일 저장해뒀던 경로로 지정하고 `Finish` 한다.
 
-    <img src="https://user-images.githubusercontent.com/41332126/72138874-12835600-33d1-11ea-8d82-e8e908460c2d.png" height=450>
+    <img src="https://user-images.githubusercontent.com/41332126/72138874-12835600-33d1-11ea-8d82-e8e908460c2d.png" height=480>
 
 ### 한글 설정
-&nbsp;그러나 한글이 깨지는 경우가 발생할 수 있다. 이런 경우는 import한 프로젝트는 **UTF-8**으로 설정돼있지만 이클립스 인코딩(encoding)이 "EUC-KR" 또는 "MS949"로 설정돼있기 때문이다.
+&nbsp;그러나 한글이 깨지는 경우가 발생할 수 있다. 이런 경우는 import한 프로젝트는 <br>**UTF-8**으로 설정돼있지만 이클립스 인코딩(encoding)이 "EUC-KR" 또는 "MS949"로 설정돼있기 때문이다.
 > 이클립스 인코딩 설정
 6. Winodw > Preferences > General > Content Types > Java Class File 선택 > `Default encoding에` **` UTF-8 `** `입력`
 
-    <img src="https://user-images.githubusercontent.com/41332126/72330901-a703f600-36fa-11ea-8c7a-f2c1621460c1.png" height=350>
+    <img src="https://user-images.githubusercontent.com/41332126/72330901-a703f600-36fa-11ea-8c7a-f2c1621460c1.png" height=400>
 7. Window > Preferences > General > Editors > Text Editors > Spelling > `Encoding에서` **` UTF-8 `** `선택`
 
-    <img src="https://user-images.githubusercontent.com/41332126/72330964-c00ca700-36fa-11ea-9e6f-e280f12e18e3.png" height=550>
+    <img src="https://user-images.githubusercontent.com/41332126/72330964-c00ca700-36fa-11ea-9e6f-e280f12e18e3.png" height=600>
 8. Window > Preferences > General > Workspace > `Text file encoding에서` **` UTF-8 `** `선택`
 
-    <img src="https://user-images.githubusercontent.com/41332126/72331040-d9155800-36fa-11ea-8c30-2a5a7936fa71.png" height=480>
+    <img src="https://user-images.githubusercontent.com/41332126/72331040-d9155800-36fa-11ea-8c30-2a5a7936fa71.png" height=530>
 > 프로젝트 인코딩 설정
 9. Project > Properties > Resource > `Text file encoding에서` **` UTF-8 `** `선택`
 
-    <img src="https://user-images.githubusercontent.com/41332126/72331145-0b26ba00-36fb-11ea-9554-91552ec46b77.png" height=350>
-10. 클라이언트에 해당하는 MultiChatController.java와 서버에 해당하는 MultiChatServer.java 파일을 열고 각각 `Run(Ctrl+F11)`시켜준다.
+    <img src="https://user-images.githubusercontent.com/41332126/72331145-0b26ba00-36fb-11ea-9554-91552ec46b77.png" height=380>
+10. 클라이언트에 해당하는 MultiChatController.java와 <br>서버에 해당하는 MultiChatServer.java 파일을 열고 각각 `Run(Ctrl+F11)`시켜준다.
 
     <img src="https://user-images.githubusercontent.com/41332126/72335053-ade23700-3701-11ea-9bca-23ef5e612079.png" height=350>
     <img src="https://user-images.githubusercontent.com/41332126/72336389-0d414680-3704-11ea-978b-7f0e83e4ac91.png" height=400>
 <br>
 
 ## Window Builder
-&nbsp;우선 필자는 윈도우빌더로 만든 파일 자체를 이용하지 않고 일부 코드만을 가져와 참조하는 용도로 사용하였다.<br>
-윈도우빌더는 자바 GUI 응용 프로그램을 만들 때 보다 더 가시적으로 해주어 사용자의 GUI 작업을 보다 더 편리하게 도와주는 도구이다. <br>SWT Designer와 Swing Designer로 구성되어 있으며, 컨트롤을 끌어놓아 쉽게 추가하고 컨트롤에 이벤트 핸들러를 추가하고 속성 편집기를 사용하여 <br>컨트롤의 다양한 속성을 변경하는 등 다양한 기능을 제공한다. 따라서 이전에 GUI 코드를 모두 직접 타이핑해야는 수고로움과 작성 동시에 <br>확인할 수 없다는 번거러움을 해소하고 코드 작성에 많은 시간을 소비하지 않고도 Java GUI 응용 프로그램을 매우 쉽게 작성할 수 있게 해준다.
+&nbsp;우선 필자는 윈도우빌더로 만든 파일 자체를 이용하지 않고 일부 코드만을 가져와 참조하는 용도로 사용하였다. 윈도우빌더는 자바 GUI 응용 프로그램을 만들 때 보다 더 가시적으로 해주어 사용자의 GUI 작업을 보다 더 편리하게 도와주는 도구이다. SWT Designer와 Swing Designer로 구성되어 있으며, 컨트롤을 끌어놓아 쉽게 추가하고 컨트롤에 이벤트 핸들러를 추가하고 속성 편집기를 사용하여 컨트롤의 다양한 속성을 변경하는 등 다양한 기능을 제공한다. 따라서 이전에 GUI 코드를 모두 직접 타이핑해야는 수고로움과 작성 동시에 확인할 수 없다는 번거러움을 해소하고 코드 작성에 많은 시간을 소비하지 않고도 Java GUI 응용 프로그램을 매우 쉽게 작성할 수 있게 해준다.
+
 ### 설치 방법
 1. Help > Eclipse Marketplace...
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/9913E53E5BB891FB1A" height=300>
+    <img src="https://t1.daumcdn.net/cfile/tistory/9913E53E5BB891FB1A" height=320>
 2. `Windowbuilder 검색 후 Install`
 
-    <img src="https://user-images.githubusercontent.com/41332126/72404695-99ea1400-3799-11ea-9111-95df0f66d0ec.png" height=330>
+    <img src="https://user-images.githubusercontent.com/41332126/72404695-99ea1400-3799-11ea-9111-95df0f66d0ec.png" height=350>
 3. 설치할 항목을 선택 후 `Confirm`
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/992DE83E5BB891FC27" height=600>
+    <img src="https://t1.daumcdn.net/cfile/tistory/992DE83E5BB891FC27" height=630>
 4. 라이센스 동의. `선택 후 Finish`
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/9953573E5BB891FD26" height=400>
+    <img src="https://t1.daumcdn.net/cfile/tistory/9953573E5BB891FD26" height=550>
 5. 이클립스 재시작. `Yes`<br>
 설치가 끝나면 이클립스 재시작 여부를 묻는 팝업 등장
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/2664243F564EFB0B0C" height=130>
+    <img src="https://t1.daumcdn.net/cfile/tistory/2664243F564EFB0B0C" height=150>
 
 ### 사용 방법
 6. File > New > Other... (Ctrl+N)
 7. WidowBuilder > Swing Designer > 'JFrame(원하는 항목)' 선택 후 `Next`
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/99B9A5415B35858E33" height=400>
+    <img src="https://t1.daumcdn.net/cfile/tistory/99B9A5415B35858E33" height=420>
 8. `Name에 frame 이름 작성 후 Finish`<br>
 Package는 따로 지정하지 않으면 default패키지에 JFrame 클래스가 생성된다.
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/99832F415B35858E02" height=400>
+    <img src="https://t1.daumcdn.net/cfile/tistory/99832F415B35858E02" height=430>
 9. **Source 화면** &nbsp;&nbsp;화면 하단에 Design 탭을 클릭하여 GUI 디자인을 편집한다.
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/999F33415B35858F33" height=400>
+    <img src="https://t1.daumcdn.net/cfile/tistory/999F33415B35858F33" height=420>
 10. **Design 화면** &nbsp;&nbsp;Palette에서 원하는 항목을 화살표 방향으로 끌어다가 Frame 위에 놓으면 추가된다.
 
-    <img src="https://t1.daumcdn.net/cfile/tistory/992C08415B35858F2D" height=420>
+    <img src="https://t1.daumcdn.net/cfile/tistory/992C08415B35858F2D" height=450>
 11. 다시 Source 화면으로 돌아가면 추가시킨 항목들에 대한 코드가 추가적으로 작성된 걸 볼 수 있다.
 
 <br>
@@ -202,18 +235,24 @@ JSON 메시지를 자바 객체로 쉽게 변환할 수 있는 Gson 라이브러
 1. github.com/google/gson 접속 후 README에서 Downlads 부분의 `Gson jar downloads` 클릭
 2. `Downlads 클릭 > jar 선택 > 적당한 폴더에 다운로드`<br>2.3 이상의 최신 버전을 사용하면 되는데 업로드된 파일은 2.3.1 버전을 사용하고있다.
 
-	<img src="https://user-images.githubusercontent.com/41332126/72705710-87a81580-3b9f-11ea-88cc-6d46d1896d7f.png" height=350>
+	<img src="https://user-images.githubusercontent.com/41332126/72705710-87a81580-3b9f-11ea-88cc-6d46d1896d7f.png" height=370>
 3. 이클립스 > 프로젝트 우클릭 > Properties (Alt+Enter) > Java Build Path > Libraries > `Add External JARs... > gson-2.x.x.jar 파일 선택` > OK<br>라이브러리 목록에 gson이 추가되어 있는지 확인한다.
 	
-	<img src="https://user-images.githubusercontent.com/41332126/72706891-790f2d80-3ba2-11ea-99bd-404966208743.png" height=400>
+	<img src="https://user-images.githubusercontent.com/41332126/72706891-790f2d80-3ba2-11ea-99bd-404966208743.png" height=420>
 
 <br>
 
-## 클래스 설계 
-# MultiChatServer.java
-&nbsp;서버 프로그램은 서비스를 제공하느 프로그램을 말하며, 멀티 채팅 서버는 다중 사용자 연결을 관리하고 서로 간의 대화를 중계하는 역할을 한다. <br>여러 클라이언트와 동시에 연결하기 위해 각 클라이언트 연결을 스레드로 처리하며 클라이언트를 종료할 때 해당 스레드도 종료하도록 프로그래밍한다. <br>연결된 클라이언트가 있으면 새로운 스레드 클래스인 ChatThread 클래스를 생성하며, 생성된 인스턴스를 ArrayList인 chatlist에 추가한다.
+# 클래스 설계
+- [MultiChatServer](#multichatserver.java)
+- [MultiChatData (M)](#multichatdata.java-(model-class))
+- [MultiChatUI (V)](#multichatui.java-(view-class))
+- [MultiChatController (C)](#multichatcontroller.java-(controller-class))
+- [Message](#message.java)
 
-*&nbsp;원래 클라이언트와 서버는 서로 다른 컴퓨터에서 실행하는 것이 기본이지만 여기서는 편의상 같은 컴퓨터에서 실행하여 테스트한다고 가정한다.<br>&nbsp;&nbsp;클라이언트 코드에서 IP 주소만 변경하면 원격 서버 접속도 가능하다.
+# MultiChatServer.java
+&nbsp;서버 프로그램은 서비스를 제공하느 프로그램을 말하며, 멀티 채팅 서버는 다중 사용자 연결을 관리하고 서로 간의 대화를 중계하는 역할을 한다. 여러 클라이언트와 동시에 연결하기 위해 각 클라이언트 연결을 스레드로 처리하며 클라이언트를 종료할 때 해당 스레드도 종료하도록 프로그래밍한다. 연결된 클라이언트가 있으면 새로운 스레드 클래스인 ChatThread 클래스를 생성하며, 생성된 인스턴스를 ArrayList인 chatlist에 추가한다.
+
+*&nbsp;원래 클라이언트와 서버는 서로 다른 컴퓨터에서 실행하는 것이 기본이지만 여기서는 편의상 같은 컴퓨터에서 실행하여 테스트한다고 가정한다. 클라이언트 코드에서 IP 주소만 변경하면 원격 서버 접속도 가능하다.
 
 | 메서드 | 설명 |
 |:--------|:--------|
@@ -223,110 +262,87 @@ JSON 메시지를 자바 객체로 쉽게 변환할 수 있는 Gson 라이브러
 | void actionPerformed(ActionEvent e) | 실제 이벤트 핸들러 구현 |
 
 ```java
-// GUI 부분
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
-
-// 통신 부분
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.logging.Logger;
-import com.google.gson.Gson;
+public class MultiChatServer extends JFrame implements ActionListener {
 ```
 ```java
-public class MultiChatServer extends JFrame implements ActionListener {
-    // GUI 부분
-	private JPanel contentPane;
-	private JTextArea s_msgOut= new JTextArea(); // server print out
-	private JButton startButton = new JButton("서버 실행");
-	private JButton stopButton = new JButton("서버 중지");	
+// GUI 부분
+private JPanel contentPane;
+private JTextArea s_msgOut= new JTextArea(); // server print out
+private JButton startButton = new JButton("서버 실행");
+private JButton stopButton = new JButton("서버 중지");	
 
-    // 통신 부분
-    private ServerSocket ss = null; // 서버 소켓
-	private Socket s= null; // 클라이언트 연결 소켓  
-    ArrayList<ChatThread> chatThreads = new ArrayList<ChatThread>(); // 연결된 클라이언트 스레드 관리
-	Logger logger; // 메시지 기록
-	
-	ArrayList<String> userList = new ArrayList<String>();
-	HashSet hs = new HashSet();
-	ArrayList<String> tmpList = new ArrayList<String>();
-	DefaultListModel<String> user;
-	int people = 0;
+// 통신 부분
+private ServerSocket ss = null; // 서버 소켓
+private Socket s= null;         // 클라이언트 연결 소켓  
+ArrayList<ChatThread> chatThreads = new ArrayList<ChatThread>(); // 연결된 클라이언트 스레드 관리
+Logger logger;                  // 메시지 기록
+
+ArrayList<String> userList = new ArrayList<String>();
+HashSet hs = new HashSet();
+ArrayList<String> tmpList = new ArrayList<String>();
+DefaultListModel<String> user;
+int people = 0;
 ```
 ```java	
-    // <GUI 부분>
-	MultiChatServer() {  // 생성자 
-		super("Server"); // the title for the frame
-		init();  		 // 화면 구성 메소드
-		addButtonActionListener(); // 액션리스너 설정 메소드
-	}
-	
-	private void init() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 321, 364);
-		setResizable(false); // 창 사이즈 고정
+// <GUI 부분>
+MultiChatServer() {  // 생성자 
+    super("Server"); // the title for the frame
+    init();  		 // 화면 구성 메소드
+    addButtonActionListener(); // 액션리스너 설정 메소드
+}
 
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
-		setContentPane(contentPane);
-		
-		JScrollPane scrollPane = new JScrollPane(s_msgOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // 스크롤 열-필요에 따라, 행-없음
-		scrollPane.setBounds(18, 15, 281, 256);
-		contentPane.add(scrollPane);
-		
-		s_msgOut.setFont(new Font("a시네마M", Font.PLAIN, 13));
-		s_msgOut.setForeground(Color.WHITE);
-		s_msgOut.setBackground(new Color(153, 153, 102));
-		s_msgOut.setLineWrap(true); // 줄바꿈 yes
-		s_msgOut.setWrapStyleWord(true); // 단어 단위 줄바꿈 yes
-		s_msgOut.append(" ~ 서버 실행중 ~ \n");
-		scrollPane.setViewportView(s_msgOut);
-		
-		startButton.setBounds(28, 285, 115, 33);
-		startButton.setFont(new Font("a시네마M", Font.PLAIN, 14));
-		contentPane.add(startButton);
-		
-		stopButton.setBounds(173, 285, 115, 33);
-		stopButton.setFont(new Font("a시네마M", Font.PLAIN, 14));
-		contentPane.add(stopButton);
-		
-		setVisible(true); // true=show, false=hide
-	}
-	
-	private void addButtonActionListener() {
-		startButton.addActionListener(this);
-		stopButton.addActionListener(this);
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Object obj = e.getSource();
-		
-		if(obj == startButton) {
-			System.out.println("서버 실행 버튼 클릭");
-			start();  // 소켓 생성 및 사용자 접속 대기
-		}
-		else if(obj == stopButton) {
-			System.out.println("서버 중지 버튼 클릭");
-			System.exit(0);
-		}
-	}
-    // </GUI 부분>
+private void init() {
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setBounds(100, 100, 321, 364);
+    setResizable(false); // 창 사이즈 고정
+
+    contentPane = new JPanel();
+    contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+    contentPane.setLayout(null);
+    setContentPane(contentPane);
+    
+    JScrollPane scrollPane = new JScrollPane(s_msgOut, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // 스크롤 열-필요에 따라, 행-없음
+    scrollPane.setBounds(18, 15, 281, 256);
+    contentPane.add(scrollPane);
+    
+    s_msgOut.setFont(new Font("a시네마M", Font.PLAIN, 13));
+    s_msgOut.setForeground(Color.WHITE);
+    s_msgOut.setBackground(new Color(153, 153, 102));
+    s_msgOut.setLineWrap(true); // 줄바꿈 yes
+    s_msgOut.setWrapStyleWord(true); // 단어 단위 줄바꿈 yes
+    s_msgOut.append(" ~ 서버 실행중 ~ \n");
+    scrollPane.setViewportView(s_msgOut);
+    
+    startButton.setBounds(28, 285, 115, 33);
+    startButton.setFont(new Font("a시네마M", Font.PLAIN, 14));
+    contentPane.add(startButton);
+    
+    stopButton.setBounds(173, 285, 115, 33);
+    stopButton.setFont(new Font("a시네마M", Font.PLAIN, 14));
+    contentPane.add(stopButton);
+    
+    setVisible(true); // true=show, false=hide
+}
+
+private void addButtonActionListener() {
+    startButton.addActionListener(this);
+    stopButton.addActionListener(this);
+}
+
+@Override
+public void actionPerformed(ActionEvent e) {
+    Object obj = e.getSource();
+    
+    if(obj == startButton) {
+        System.out.println("서버 실행 버튼 클릭");
+        start();  // 소켓 생성 및 사용자 접속 대기
+    }
+    else if(obj == stopButton) {
+        System.out.println("서버 중지 버튼 클릭");
+        System.exit(0);
+    }
+}
+// </GUI 부분>
 ```
 <br>
 
@@ -339,137 +355,140 @@ public class MultiChatServer extends JFrame implements ActionListener {
 | main(String[] args) | 실행 메인 메서드 |
 
 ```java
-    // <통신 부분>
-    public void start() {
-		logger = Logger.getLogger(this.getClass().getName());
-		
-		try {
-			ss = new ServerSocket(12345);  // 12345 포트 사용
-			logger.info("MultiChatServer start");
-			
-			while (true) {
-				s = ss.accept();
-				
-				ChatThread chat = new ChatThread();
-				chatThreads.add(chat);
-				chat.start();
-			}
-		}
-		catch (Exception e) {
-			logger.info("[MultiChatServer]start() Exception 발생!!");
-			e.printStackTrace();
-		}
-	}
+// <통신 부분>
+public void start() {
+    logger = Logger.getLogger(this.getClass().getName());
+    
+    try {
+        ss = new ServerSocket(12345);  // 12345 포트 사용
+        logger.info("MultiChatServer start");
+        
+        while (true) {
+            s = ss.accept();
+            
+            ChatThread chat = new ChatThread();
+            chatThreads.add(chat);
+            chat.start();
+        }
+    }
+    catch (Exception e) {
+        logger.info("[MultiChatServer]start() Exception 발생!!");
+        e.printStackTrace();
+    }
+}
 ```
 ```java	
-	void msgSendAll(String msg) { // 연결된 모든 클라이언트에 메시지 중계
-		for(ChatThread ct : chatThreads) {
-			ct.outMsg.println(msg);
-		}
-	}
+void msgSendAll(String msg) { // 연결된 모든 클라이언트에 메시지 중계
+    for(ChatThread ct : chatThreads) {
+        ct.outMsg.println(msg);
+    }
+}
 
-	void msgSendWho(String msg, int send, int rcv) {
-		ChatThread ct = chatThreads.get(rcv);
-		ct.outMsg.println(msg);
-		ct = chatThreads.get(send);
-		ct.outMsg.println(msg);
-	}
+void msgSendWho(String msg, int send, int rcv) {
+    ChatThread ct = chatThreads.get(rcv);
+    ct.outMsg.println(msg);
+    ct = chatThreads.get(send);
+    ct.outMsg.println(msg);
+}
 ```
-↓ Thread 클래스를 상속해서 구현하고, MultiChatServer클래스와 더 쉽게 연결하여 사용할 수 있도록 내부 클래스 형태로 구현한다.
+↓ Thread 클래스를 상속해서 구현하고,<br>
+&nbsp;&nbsp;&nbsp;MultiChatServer클래스와 더 쉽게 연결하여 사용할 수 있도록 내부 클래스 형태로 구현한다.
 ```java
-	// 각각의 클라이언트 관리를 위한 쓰레드 클래스
-	// 1개의 스레드에서는 1개의 일만 처리할 수 있다
-	class ChatThread extends Thread {
-		String msg; // 수신 메시지 및 파싱 메시지 처리를 위한 변수 선언
-		Message m = new Message(); // 메시지 객체 생성
-		Gson gson = new Gson(); // Json Parser 초기화
+// 각각의 클라이언트 관리를 위한 쓰레드 클래스
+// 1개의 스레드에서는 1개의 일만 처리할 수 있다
+class ChatThread extends Thread {
+    String msg; // 수신 메시지 및 파싱 메시지 처리를 위한 변수 선언
+    Message m = new Message(); // 메시지 객체 생성
+    Gson gson = new Gson(); // Json Parser 초기화
 
-		// 입출력 스트림
-		private BufferedReader inMsg = null;
-		private PrintWriter outMsg = null;
+    // 입출력 스트림
+    private BufferedReader inMsg = null;
+    private PrintWriter outMsg = null;
 
-		public void run() { // 스레드에서 처리할 일을 기재한다
-			boolean status = true;
-			logger.info("ChatThread start...");
-			
-			try {
-				// 입출력 스트림 생성
-				inMsg = new BufferedReader(new InputStreamReader(s.getInputStream()));
-				outMsg = new PrintWriter(s.getOutputStream(),true);
-				
-				// 상태정보가 true 이면 루프를 돌면서 사용자로 부터 수신된 메시지 처리
-				while(status) {
-					msg = inMsg.readLine(); // 수신된 메시지를 msg 변수에 저장					
-					m = gson.fromJson(msg,Message.class); // JSON 메시지를 Message 객체로 매핑
-												
-					// 파싱된 문자열 배열의 두번째 요소 값에 따라 처리
-					if(m.getType().equals("logout")) { // 로그아웃 메시지인 경우
-						tmpList.remove(m.getId());
-						user = new DefaultListModel<>();
-						for(int i=0; i<tmpList.size(); i++) {
-							user.add(i, tmpList.get(i));
-						}
-						
-						userList.remove(m.getId());
-						hs.remove(m.getId());
-						chatThreads.remove(this);
-						
-						people = userList.size();
-						
-						s_msgOut.append("사용자 "+m.getId()+" 로그아웃했습니다.\n");
-						msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그아웃했습니다.","server", "all", user, people)));
-						status = false; // 해당 클라이언트 스레드 종료로 인해 status 를 false 로 설정
-					}
-					else if(m.getType().equals("login")) { // 로그인 메시지인 경우
-						tmpList.add(people, m.getId());
-						user = new DefaultListModel<>();
-						for(int i=0; i<tmpList.size(); i++) {
-							user.add(i, tmpList.get(i));
-						}  
-						
-						userList.add(m.getId());
-						hs.addAll(userList);
-						userList.clear();
-						userList.addAll(hs);
-						
-						people = userList.size();
-						
-						msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그인했습니다.","server", "all", user, people)));
-						System.out.println(msg);
-						s_msgOut.append("사용자 "+m.getId()+" 로그인했습니다.\n");
-					}
-					else if(m.getType().equals("secret")) { // 귓속말 메시지인 경우
-						int numS = user.indexOf(m.getId());
-						int numR = user.indexOf(m.getRcvid());
-						//System.out.println("numS : "+numS+"\tnumR : "+numR);
+    public void run() { // 스레드에서 처리할 일을 기재한다
+        boolean status = true;
+        logger.info("ChatThread start...");
+        
+        try {
+            // 입출력 스트림 생성
+            inMsg = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            outMsg = new PrintWriter(s.getOutputStream(),true);
+            
+            // 상태정보가 true 이면 루프를 돌면서 사용자로 부터 수신된 메시지 처리
+            while(status) {
+                msg = inMsg.readLine(); // 수신된 메시지를 msg 변수에 저장					
+                m = gson.fromJson(msg,Message.class); // JSON 메시지를 Message 객체로 매핑
+                                            
+                // 파싱된 문자열 배열의 두번째 요소 값에 따라 처리
+                if(m.getType().equals("logout")) { // 로그아웃 메시지인 경우
+                    tmpList.remove(m.getId());
+                    user = new DefaultListModel<>();
+                    for(int i=0; i<tmpList.size(); i++) {
+                        user.add(i, tmpList.get(i));
+                    }
+                    
+                    userList.remove(m.getId());
+                    hs.remove(m.getId());
+                    chatThreads.remove(this);
+                    
+                    people = userList.size();
+                    
+                    s_msgOut.append("사용자 "+m.getId()+" 로그아웃했습니다.\n");
+                    msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그아웃했습니다.","server", "all", user, people)));
+                    status = false; // 해당 클라이언트 스레드 종료로 인해 status 를 false 로 설정
+                }
+                else if(m.getType().equals("login")) { // 로그인 메시지인 경우
+                    tmpList.add(people, m.getId());
+                    user = new DefaultListModel<>();
+                    for(int i=0; i<tmpList.size(); i++) {
+                        user.add(i, tmpList.get(i));
+                    }  
+                    
+                    userList.add(m.getId());
+                    hs.addAll(userList);
+                    userList.clear();
+                    userList.addAll(hs);
+                    
+                    people = userList.size();
+                    
+                    msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그인했습니다.","server", "all", user, people)));
+                    System.out.println(msg);
+                    s_msgOut.append("사용자 "+m.getId()+" 로그인했습니다.\n");
+                }
+                else if(m.getType().equals("secret")) { // 귓속말 메시지인 경우
+                    int numS = user.indexOf(m.getId());
+                    int numR = user.indexOf(m.getRcvid());
+                    //System.out.println("numS : "+numS+"\tnumR : "+numR);
 
-						msgSendWho(gson.toJson(new Message(m.getId(),"", m.getMsg(),"s_secret", m.getRcvid(), user, people)), numS, numR);
-						//System.out.println(msg);
-						s_msgOut.append("(귓속말)" + m.getId() + "→" + m.getRcvid() + " : " + m.getMsg()+"\n");
-					}
-					else { // 그밖의 경우, 일반 메시지인 경우
-						msgSendAll(msg);
-						s_msgOut.append(m.getId() + " : " + m.getMsg() + "\n");
-					}
-				} // .while
-				// 루프를 벗어나면 클라이언트 연결 종료 이므로 스레드 인터럽트
-				this.interrupt();
-				logger.info(this.getName() + " 종료됨!!");
-			} // .try
-			catch (Exception e) {
-				chatThreads.remove(this);
-				logger.info("[ChatThread]run() IOException 발생!!");
-                e.printStackTrace();
-			}
-		} // .run
-	}
+                    msgSendWho(gson.toJson(new Message(m.getId(),"", m.getMsg(),"s_secret", m.getRcvid(), user, people)), numS, numR);
+                    //System.out.println(msg);
+                    s_msgOut.append("(귓속말)" + m.getId() + "→" + m.getRcvid() + " : " + m.getMsg()+"\n");
+                }
+                else { // 그밖의 경우, 일반 메시지인 경우
+                    msgSendAll(msg);
+                    s_msgOut.append(m.getId() + " : " + m.getMsg() + "\n");
+                }
+            } // .while
+            // 루프를 벗어나면 클라이언트 연결 종료 이므로 스레드 인터럽트
+            this.interrupt();
+            logger.info(this.getName() + " 종료됨!!");
+        } // .try
+        catch (Exception e) {
+            chatThreads.remove(this);
+            logger.info("[ChatThread]run() IOException 발생!!");
+            e.printStackTrace();
+        }
+    } // .run
+}
 ```
 ```java	
-	public static void main(String[] args) {
-		MultiChatServer server = new MultiChatServer();
-		server.start();
-	}
-    // </통신 부분>
+public static void main(String[] args) {
+    MultiChatServer server = new MultiChatServer();
+    server.start();
+}
+// </통신 부분>
+```
+```java
 } // .MultiChatServer class
 ```
 <br>
@@ -502,8 +521,7 @@ public class MultiChatData {
 <br>
 
 # MultiChatUI.java (View class)
-&nbsp;화면의 구성 요소를 정의하고 레이웃을 이용하여 컴포넌트를 배치한다. <br>또 MultiChatUI 클래스에서는 다른 클래스들을 생성하거나 참조하지 않는다.<br>
-이벤트를 발생할 때 처리할 핸들러 클래스는 파라미터로 전달하는데 <br>컨트롤러에서 메서드를 호출하기 때문에 실제 이벤트 핸들러 코드는 컨트롤러의 appMain() 메서드에서 구현한다. 
+&nbsp;화면의 구성 요소를 정의하고 레이웃을 이용하여 컴포넌트를 배치한다. 또 MultiChatUI 클래스에서는 다른 클래스들을 생성하거나 참조하지 않는다. 이벤트를 발생할 때 처리할 핸들러 클래스는 파라미터로 전달하는데 컨트롤러에서 메서드를 호출하기 때문에 실제 이벤트 핸들러 코드는 컨트롤러의 appMain() 메서드에서 구현한다. 
 
 | 메서드 | 설명 |
 |:--------|:--------|
@@ -534,7 +552,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
-
+```
+```java
 public class MultiChatUI extends JFrame {
 	/*
 	* 기본적으로 private을 사용하여 멤버 변수를 선언하되
@@ -729,13 +748,12 @@ public class MultiChatUI extends JFrame {
 	public void addButtonWindowListenr(WindowListener listener) {
 		this.addWindowListener(listener);
 	}
-
 }
 ```
 <br>
 
 # MultiChatController.java (Controller class)
-&nbsp;프로그램의 메인으로 서버와 통신을 담당하고, 클라이언트에서 발생하는 이벤트에서 발생하는 <br>이벤트에 따라 UI를 변경하거나 수신된 메시지를 출력하는 등 프로그램의 전반적인 로직을 처리한다. <br>view 클래스인 MultiChatUI와 독립적으로 구현하며, 서버와 통신은 별도 스레드로 다룬다. 
+&nbsp;프로그램의 메인으로 서버와 통신을 담당하고, 클라이언트에서 발생하는 이벤트에서 발생하는 이벤트에 따라 UI를 변경하거나 수신된 메시지를 출력하는 등 프로그램의 전반적인 로직을 처리한다. view 클래스인 MultiChatUI와 독립적으로 구현하며, 서버와 통신은 별도 스레드로 다룬다. 
 
 | 메서드 | 설명 |
 |:--------|:--------|
@@ -766,219 +784,222 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import com.google.gson.Gson;
-
+```
+```java
 public class MultiChatController implements Runnable {
-	// 뷰 클래스 참조 객체
-	private final MultiChatUI v;
-	
-	// 데이터 클래스 참조 객체
-	private final MultiChatData chatData;
-	
-	// 소켓 연결을 위한 변수 선언
-	private String ip = "127.0.0.1";
-	private Socket socket;
-	private BufferedReader inMsg = null;
-	private PrintWriter outMsg = null;
-	
-	// 메시지 파싱을 위한 객체 생성
-	Gson gson = new Gson();
-	Message m;
-	 
-	boolean status; // 상태 플래그
-	Logger logger; // 로거 객체 
-	Thread thread; // 메시지 수신 스레드
-	
-	// 메시지 전송 시간, 날짜 객체 생성
-	SimpleDateFormat time_sdf = new SimpleDateFormat("a hh:mm");
-	Date date = new Date();
-	SimpleDateFormat date_sdf = new SimpleDateFormat("yyyy년 MMM dd일 EEE요일", Locale.KOREA);
-	int count = 0;
-	
-	// 접속자
-	DefaultListModel<String> check = new DefaultListModel<>();
-	int people;
+```
+```java
+// 뷰 클래스 참조 객체
+private final MultiChatUI v;
+
+// 데이터 클래스 참조 객체
+private final MultiChatData chatData;
+
+// 소켓 연결을 위한 변수 선언
+private String ip = "127.0.0.1";
+private Socket socket;
+private BufferedReader inMsg = null;
+private PrintWriter outMsg = null;
+
+// 메시지 파싱을 위한 객체 생성
+Gson gson = new Gson();
+Message m;
+    
+boolean status; // 상태 플래그
+Logger logger; // 로거 객체 
+Thread thread; // 메시지 수신 스레드
+
+// 메시지 전송 시간, 날짜 객체 생성
+SimpleDateFormat time_sdf = new SimpleDateFormat("a hh:mm");
+Date date = new Date();
+SimpleDateFormat date_sdf = new SimpleDateFormat("yyyy년 MMM dd일 EEE요일", Locale.KOREA);
+int count = 0;
+
+// 접속자
+DefaultListModel<String> check = new DefaultListModel<>();
+int people;
 ```
 ```java	
-	// 모델과 뷰 객체를 파라미터로 하는 생성자
-	public MultiChatController(MultiChatData chatData, MultiChatUI v) {
-		// 로거 객체 초기화
-		logger = Logger.getLogger(this.getClass().getName());
-		
-		// 모델과 뷰 클래스 참조
-		this.chatData = chatData;
-		this.v = v;
-	}
+// 모델과 뷰 객체를 파라미터로 하는 생성자
+public MultiChatController(MultiChatData chatData, MultiChatUI v) {
+    // 로거 객체 초기화
+    logger = Logger.getLogger(this.getClass().getName());
+    
+    // 모델과 뷰 클래스 참조
+    this.chatData = chatData;
+    this.v = v;
+}
 ```
 ```java	
-	// 어플리케이션 메인 실행 메서드
-	public void appMain()
-	{
-		// 데이터 객체에서 데이터 변화를 처리할 UI 객체 추가
-		chatData.addObj(v.c_msgOut);
-		
-		// <엔터키 이벤트>
-		v.addEnterKeyListener(new KeyListener()
-		{
-			@Override
-			public void keyPressed(KeyEvent e) {
-				int key = e.getKeyCode();
-				if(key == KeyEvent.VK_ENTER) {
-					Object obj = e.getSource();
-					if (obj == v.idInput || obj == v.loginButton)
-					{
-						v.id = v.idInput.getText();
-						v.idOutLabel.setText("user : " +v.id);
-						v.cardLayout.show(v.tab, "logout");
-						connectServer();
-					}
-					else if (obj == v.logoutButton) {
-						//로그아웃 메시지 전송
-						outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
-						//대화창 클리어
-						v.c_msgOut.setText("");
-						//접속자리스트 지우기
-						v.nameOutModel.removeAllElements();
-						v.nameOut.setModel(v.nameOutModel);
-						v.idInput.setText("");
-						//로그인 패널로 전환
-						v.cardLayout.show(v.tab, "login");
-						outMsg.close();
-						
-						try {
-							inMsg.close();
-							socket.close();
-						}
-						catch (IOException ex) {
-							ex.printStackTrace();
-						}
-						status = false;
-					}
-					else if (obj == v.msgInput || obj == v.sendButton) {
-						if(v.secretRadio.isSelected() == true) {
-							String rcvid = v.nameOut.getSelectedValue();
-							if(rcvid == null) {
-								JOptionPane.showMessageDialog(v.getContentPane(), "사람을 선택해주세요!");
-							}
-							else {
-								JOptionPane.showMessageDialog(v.getContentPane(), rcvid+"님에게 귓속말을 보내시겠습니까?");
-								outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "secret", rcvid, v.nameOutModel, 0)));
-			                    v.msgInput.setText("");
-							}
-						}
-						else {
-							// 메시지 전송
-		                    outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "msg", "all", v.nameOutModel, 0)));
-		                    // 입력창 클리어
-		                    v.msgInput.setText("");
-						}
-					}
-					else if (obj == v.exitButton) {
-						v.nameOutModel.removeAllElements();
-						v.nameOut.setModel(v.nameOutModel);
-						outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
-						System.exit(0);
-					}
-					else if (obj == v.deleteButton) {
-						outMsg.flush();
-						v.c_msgOut.setText("--------------------------------- 기록 삭제 --------------------------------\n");
-					}
-					
-				}
-			}
+// 어플리케이션 메인 실행 메서드
+public void appMain()
+{
+    // 데이터 객체에서 데이터 변화를 처리할 UI 객체 추가
+    chatData.addObj(v.c_msgOut);
+    
+    // <엔터키 이벤트>
+    v.addEnterKeyListener(new KeyListener()
+    {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int key = e.getKeyCode();
+            if(key == KeyEvent.VK_ENTER) {
+                Object obj = e.getSource();
+                if (obj == v.idInput || obj == v.loginButton)
+                {
+                    v.id = v.idInput.getText();
+                    v.idOutLabel.setText("user : " +v.id);
+                    v.cardLayout.show(v.tab, "logout");
+                    connectServer();
+                }
+                else if (obj == v.logoutButton) {
+                    //로그아웃 메시지 전송
+                    outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
+                    //대화창 클리어
+                    v.c_msgOut.setText("");
+                    //접속자리스트 지우기
+                    v.nameOutModel.removeAllElements();
+                    v.nameOut.setModel(v.nameOutModel);
+                    v.idInput.setText("");
+                    //로그인 패널로 전환
+                    v.cardLayout.show(v.tab, "login");
+                    outMsg.close();
+                    
+                    try {
+                        inMsg.close();
+                        socket.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    status = false;
+                }
+                else if (obj == v.msgInput || obj == v.sendButton) {
+                    if(v.secretRadio.isSelected() == true) {
+                        String rcvid = v.nameOut.getSelectedValue();
+                        if(rcvid == null) {
+                            JOptionPane.showMessageDialog(v.getContentPane(), "사람을 선택해주세요!");
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(v.getContentPane(), rcvid+"님에게 귓속말을 보내시겠습니까?");
+                            outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "secret", rcvid, v.nameOutModel, 0)));
+                            v.msgInput.setText("");
+                        }
+                    }
+                    else {
+                        // 메시지 전송
+                        outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "msg", "all", v.nameOutModel, 0)));
+                        // 입력창 클리어
+                        v.msgInput.setText("");
+                    }
+                }
+                else if (obj == v.exitButton) {
+                    v.nameOutModel.removeAllElements();
+                    v.nameOut.setModel(v.nameOutModel);
+                    outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
+                    System.exit(0);
+                }
+                else if (obj == v.deleteButton) {
+                    outMsg.flush();
+                    v.c_msgOut.setText("--------------------------------- 기록 삭제 --------------------------------\n");
+                }
+                
+            }
+        }
 
-			@Override
-			public void keyReleased(KeyEvent e) {}
-			@Override
-			public void keyTyped(KeyEvent e) {}
-		});
-		// </엔터키 이벤트>
+        @Override
+        public void keyReleased(KeyEvent e) {}
+        @Override
+        public void keyTyped(KeyEvent e) {}
+    });
+    // </엔터키 이벤트>
 
-		// <버튼 이벤트>
-		v.addButtonActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Object obj = e.getSource();
-				if (obj == v.loginButton) {
-					v.id = v.idInput.getText();
-					v.idOutLabel.setText("user : " +v.id);
-					v.cardLayout.show(v.tab, "logout");
-					connectServer();
-				}
-				else if (obj == v.logoutButton) {
-					outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
-					v.c_msgOut.setText("");
-					v.contactLabel.setText(" ~ 접속자 ~");
-					v.nameOutModel.removeAllElements();
-					v.nameOut.setModel(v.nameOutModel);
-					v.idInput.setText("");
-					v.cardLayout.show(v.tab, "login");
-					outMsg.close();
-					
-					try {
-						inMsg.close();
-						socket.close();
-					}
-					catch (IOException ex) {
-						ex.printStackTrace();
-					}
-					status = false;
-				}
-				else if (obj == v.sendButton) {
-					if(v.secretRadio.isSelected() == true) {
-						String rcvid = v.nameOut.getSelectedValue();
-						if(rcvid == null) {
-							JOptionPane.showMessageDialog(v.getContentPane(), "사람을 선택해주세요!");
-						}
-						else {
-							JOptionPane.showMessageDialog(v.getContentPane(), rcvid+"님에게 귓속말을 보내시겠습니까?");
-							outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "secret", rcvid, v.nameOutModel, 0)));
-		                    v.msgInput.setText("");
-						}
-					}
-					else {
-	                    outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "msg", "all", v.nameOutModel, 0)));
-	                    v.msgInput.setText("");
-					}
-				}
-				else if (obj == v.exitButton) {
-					v.nameOutModel.removeAllElements();
-					v.nameOut.setModel(v.nameOutModel);
-					outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
-					System.exit(0);
-				}
-				else if (obj == v.deleteButton) {
-					outMsg.flush();
-					v.c_msgOut.setText("--------------------------------- 기록 삭제 --------------------------------\n");
-				}
-			}
-		});	
-		// </버튼 이벤트>
+    // <버튼 이벤트>
+    v.addButtonActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object obj = e.getSource();
+            if (obj == v.loginButton) {
+                v.id = v.idInput.getText();
+                v.idOutLabel.setText("user : " +v.id);
+                v.cardLayout.show(v.tab, "logout");
+                connectServer();
+            }
+            else if (obj == v.logoutButton) {
+                outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
+                v.c_msgOut.setText("");
+                v.contactLabel.setText(" ~ 접속자 ~");
+                v.nameOutModel.removeAllElements();
+                v.nameOut.setModel(v.nameOutModel);
+                v.idInput.setText("");
+                v.cardLayout.show(v.tab, "login");
+                outMsg.close();
+                
+                try {
+                    inMsg.close();
+                    socket.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                status = false;
+            }
+            else if (obj == v.sendButton) {
+                if(v.secretRadio.isSelected() == true) {
+                    String rcvid = v.nameOut.getSelectedValue();
+                    if(rcvid == null) {
+                        JOptionPane.showMessageDialog(v.getContentPane(), "사람을 선택해주세요!");
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(v.getContentPane(), rcvid+"님에게 귓속말을 보내시겠습니까?");
+                        outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "secret", rcvid, v.nameOutModel, 0)));
+                        v.msgInput.setText("");
+                    }
+                }
+                else {
+                    outMsg.println(gson.toJson(new Message(v.id, "", v.msgInput.getText(), "msg", "all", v.nameOutModel, 0)));
+                    v.msgInput.setText("");
+                }
+            }
+            else if (obj == v.exitButton) {
+                v.nameOutModel.removeAllElements();
+                v.nameOut.setModel(v.nameOutModel);
+                outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
+                System.exit(0);
+            }
+            else if (obj == v.deleteButton) {
+                outMsg.flush();
+                v.c_msgOut.setText("--------------------------------- 기록 삭제 --------------------------------\n");
+            }
+        }
+    });	
+    // </버튼 이벤트>
 
-		// <창 이벤트>
-		v.addButtonWindowListenr(new WindowListener() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				v.nameOutModel.removeAllElements();
-				v.nameOut.setModel(v.nameOutModel);
-				outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
-				System.exit(0);			
-			}
-			        			
-			@Override
-			public void windowActivated(WindowEvent e) {}
-			@Override
-			public void windowClosed(WindowEvent e) {}
-			@Override
-			public void windowDeactivated(WindowEvent e) {}
-			@Override
-			public void windowDeiconified(WindowEvent e) {}
-			@Override
-			public void windowIconified(WindowEvent e) {}
-			@Override
-			public void windowOpened(WindowEvent e) {}
-		});
-		// </창 이벤트>
-	}
+    // <창 이벤트>
+    v.addButtonWindowListenr(new WindowListener() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            v.nameOutModel.removeAllElements();
+            v.nameOut.setModel(v.nameOutModel);
+            outMsg.println(gson.toJson(new Message(v.id, "", "", "logout", "all", v.nameOutModel, 0)));
+            System.exit(0);			
+        }
+                            
+        @Override
+        public void windowActivated(WindowEvent e) {}
+        @Override
+        public void windowClosed(WindowEvent e) {}
+        @Override
+        public void windowDeactivated(WindowEvent e) {}
+        @Override
+        public void windowDeiconified(WindowEvent e) {}
+        @Override
+        public void windowIconified(WindowEvent e) {}
+        @Override
+        public void windowOpened(WindowEvent e) {}
+    });
+    // </창 이벤트>
+}
 ```
 <br>
 
@@ -990,95 +1011,96 @@ public class MultiChatController implements Runnable {
 ↓ [로그인] 버튼을 눌렀을 대 호출되는 메서드. 서버와 연결하고 입출력 스트림을 만든 후 메시지 수신에 필요한 스레드를 생성한다. 
 
 ```java
-	// 서버 접속을 위한 메서드 
-	public void connectServer() {
-		try {
-			// 소켓 생성
-			socket = new Socket(ip , 12345);
-			logger.log(INFO, "[Client]Sever 연결 성공!!");
-			
-			// 입출력 스트림 생성
-			inMsg = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			outMsg = new PrintWriter(socket.getOutputStream(),true);
-			
-			// 서버에 로그인 메시지 전달
-			m = new Message(v.id, "", "", "login", "all", v.nameOutModel, 0);
-			outMsg.println(gson.toJson(m));
-			
-			// 메시지 수신을 위한 스레드 생성
-			thread = new Thread(this);
-			thread.start();
-		}
-		catch(Exception e) {
-			logger.log(WARNING, "[MultiChatUI]connectServer() Exception 발생!!");
-			e.printStackTrace();
-		}
-	}
+// 서버 접속을 위한 메서드 
+public void connectServer() {
+    try {
+        // 소켓 생성
+        socket = new Socket(ip , 12345);
+        logger.log(INFO, "[Client]Sever 연결 성공!!");
+        
+        // 입출력 스트림 생성
+        inMsg = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        outMsg = new PrintWriter(socket.getOutputStream(),true);
+        
+        // 서버에 로그인 메시지 전달
+        m = new Message(v.id, "", "", "login", "all", v.nameOutModel, 0);
+        outMsg.println(gson.toJson(m));
+        
+        // 메시지 수신을 위한 스레드 생성
+        thread = new Thread(this);
+        thread.start();
+    }
+    catch(Exception e) {
+        logger.log(WARNING, "[MultiChatUI]connectServer() Exception 발생!!");
+        e.printStackTrace();
+    }
+}
 ```
 ↓ connectServer()에서 thread.start() 메서드를 실행하면서 호출된다.<br>&nbsp;&nbsp;UI 실행과 독립적으로 서버와 네트워크 연결을 유지하며, 수신된 메시지를 처리하는 역할을 담당한다.<br>&nbsp;&nbsp;일반적인 소켓 클라이언트 프로그램과 마찬가지로 while() 문을 반복하면서 <br>&nbsp;&nbsp;서버에서 전송하는 메시지를 행 단위로 읽어 와 JSON 메시지를 Message 객체로 변환한다.<br>&nbsp;&nbsp;그리고 데이터 클래스인 MultiChatData의 refresh() 메서드를 호출하여 변경할 메시지를 전달한다.
 ```java	
-    // 메시지 수신을 독립적으로 처리하기 위한 스레드 실행
-	@Override
-    public void run() {
-        // 수신 메시지 처리를 위한 변수
-        String msg;
-        
-        if(count == 0) { // 오늘 첫 채팅시에만 날짜 추가
-        	chatData.refreshData("----------------------- "+date_sdf.format(date)+" -----------------------\n");
-        	count++;
-        }
-
-        this.status=true;
-        while(status) {
-            try {
-                // 메시지 수신 및 파싱
-                msg = inMsg.readLine();
-                m = gson.fromJson(msg, Message.class);
-                
-                Date date = new Date();
-                
-                // 접속자들
-                check = m.getCheck();
-                people = m.getPeople();
-
-                // MultiChatData 객체를 통해 데이터 갱신
-                if(m.getType().equals("server")) {
-                	v.nameOut.setModel(check);
-                	v.contactLabel.setText("접속자   "+people+"명");
-                	// 로그인/로그아웃 메시지 출력
-                	chatData.refreshData(m.getId() + "" + m.getMsg() +"\n");
-                }
-                else if(m.getType().equals("s_secret")) {
-                	chatData.refreshData(m.getId() + "→" + m.getRcvid() + " : " + m.getMsg() +"               "+time_sdf.format(date) +"\n");
-                }
-                else {
-                	// 일반 메시지 출력
-                	chatData.refreshData(m.getId() + " : " + m.getMsg() +"               "+time_sdf.format(date) +"\n");
-                }
-
-                // 커서를 현재 대화 메시지에 보여줌
-                v.c_msgOut.setCaretPosition(v.c_msgOut.getDocument().getLength());
-            }
-            catch(IOException e) {
-                logger.log(WARNING,"[MultiChatUI]메시지 스트림 종료!!");
-            }
-        }
-        logger.info("[MultiChatUI]" + thread.getName()+ " 메시지 수신 스레드 종료됨!!");
+// 메시지 수신을 독립적으로 처리하기 위한 스레드 실행
+@Override
+public void run() {
+    // 수신 메시지 처리를 위한 변수
+    String msg;
+    
+    if(count == 0) { // 오늘 첫 채팅시에만 날짜 추가
+        chatData.refreshData("----------------------- "+date_sdf.format(date)+" -----------------------\n");
+        count++;
     }
+
+    this.status=true;
+    while(status) {
+        try {
+            // 메시지 수신 및 파싱
+            msg = inMsg.readLine();
+            m = gson.fromJson(msg, Message.class);
+            
+            Date date = new Date();
+            
+            // 접속자들
+            check = m.getCheck();
+            people = m.getPeople();
+
+            // MultiChatData 객체를 통해 데이터 갱신
+            if(m.getType().equals("server")) {
+                v.nameOut.setModel(check);
+                v.contactLabel.setText("접속자   "+people+"명");
+                // 로그인/로그아웃 메시지 출력
+                chatData.refreshData(m.getId() + "" + m.getMsg() +"\n");
+            }
+            else if(m.getType().equals("s_secret")) {
+                chatData.refreshData(m.getId() + "→" + m.getRcvid() + " : " + m.getMsg() +"               "+time_sdf.format(date) +"\n");
+            }
+            else {
+                // 일반 메시지 출력
+                chatData.refreshData(m.getId() + " : " + m.getMsg() +"               "+time_sdf.format(date) +"\n");
+            }
+
+            // 커서를 현재 대화 메시지에 보여줌
+            v.c_msgOut.setCaretPosition(v.c_msgOut.getDocument().getLength());
+        }
+        catch(IOException e) {
+            logger.log(WARNING,"[MultiChatUI]메시지 스트림 종료!!");
+        }
+    }
+    logger.info("[MultiChatUI]" + thread.getName()+ " 메시지 수신 스레드 종료됨!!");
+}
 ```
 ```java	
-	public static void main(String[] args)
-	{
-		MultiChatController app = new MultiChatController(new MultiChatData(), new MultiChatUI());
-		app.appMain();
-	}
-
+public static void main(String[] args)
+{
+    MultiChatController app = new MultiChatController(new MultiChatData(), new MultiChatUI());
+    app.appMain();
+}
+```
+```java
 } // .MultiChatController class
 ```
 <br>
 
 # Message.java
-&nbsp;클라이언트와 서버 간의 통신에 사용하는 JSON 규격의 메시지를 자바 객체로 변환하여 더 쉽게 사용하게 해준다.<br>현재 JSON(Javascript Object Notation)은 인터넷으로 시스템이나 프로그램 간에 데이터를 주고받는 메시지 규격으로 널리 사용된다.<br>이 메신저에서는 구글에서 만든, JSON 메시지를 자바 객체로 변환하기에 편리한 파서인 Gson을 사용한다.
+&nbsp;클라이언트와 서버 간의 통신에 사용하는 JSON 규격의 메시지를 자바 객체로 변환하여 더 쉽게 사용하게 해준다. 현재 JSON(Javascript Object Notation)은 인터넷으로 시스템이나 프로그램 간에 데이터를 주고받는 메시지 규격으로 널리 사용된다. 이 메신저에서는 구글에서 만든, JSON 메시지를 자바 객체로 변환하기에 편리한 파서인 Gson을 사용한다.
 
 | 번호 | 필드(key) | 설명(value) |
 |:--------|:--------|:--------|
@@ -1090,7 +1112,8 @@ public class MultiChatController implements Runnable {
 | 6 | check | 접속자 리스트 |
 | 7 | people | 접속자 인원 |
 
-JSON ex) {"id" : "Lilly", "passwd" : "1234", "msg" : "Hello!", "type" : "msg", "rcvid" : "", "check" : DefaultListModelName, people : 3}
+JSON ex)<br>
+{"id" : "Lilly", "passwd" : "1234", "msg" : "Hello!", "type" : "msg", "rcvid" : "", "check" : DefaultListModelName, people : 3}
 
 ```java
 import javax.swing.DefaultListModel;
@@ -1173,17 +1196,17 @@ public class Message {
 &nbsp;가장 기본적인 형태로, 제한된 여건상 하나의 컴퓨터에서 클라이언트와 서버를 모두 실행하는 경우이다. <br>채팅 프로그램이기 때문에 최소한 두 개의 클라이언트를 실행해야 채팅 테스트를 할 수 있다.
 
 ### 여러 컴퓨터에서 실행하는 경우
-&nbsp;여건만 된다면 단일 컴퓨터에서 실행하는 것보다 좋은 방법이다. 원래 채팅 프로그램은 원격 서버 컴퓨터와 인터넷에 연결된 <br>여러 클라이언트 컴퓨터가 통신하는 것이므로 최소 세 대의 컴퓨터가 있어야 제대로 테스트할 수 있다. 이때 하나는 서버로 실행하고 <br>나머지는 클라이언트로 실행한다. 서버의 IP 주소가 필요하며, MultiChatController 클래스의 String ip 변수값을 서버 IP로 변경해야 한다.
+&nbsp;여건만 된다면 단일 컴퓨터에서 실행하는 것보다 좋은 방법이다. 원래 채팅 프로그램은 원격 서버 컴퓨터와 인터넷에 연결된 여러 클라이언트 컴퓨터가 통신하는 것이므로 최소 세 대의 컴퓨터가 있어야 제대로 테스트할 수 있다. 이때 하나는 서버로 실행하고 나머지는 클라이언트로 실행한다. 서버의 IP 주소가 필요하며, MultiChatController 클래스의 String ip 변수값을 서버 IP로 변경해야 한다.
 
 <br>
 
 # 실행 결과
-3인 채팅(첸백시 EXO-CBX ver.)
+3인 채팅
 
 ![결과1](https://user-images.githubusercontent.com/41332126/72777259-62c3a900-3c58-11ea-89f4-f6faca8e127a.gif)
 
 <br>
 
-5인 채팅(레드벨벳 RedVelvet ver.) &nbsp;&nbsp;&nbsp;`썸네일 클릭하면 유튜브로 이동`
+5인 채팅 &nbsp;&nbsp;&nbsp;`썸네일 클릭하면 유튜브로 이동`
 
 [![결과2](https://img.youtube.com/vi/cFraCrZCjkM/0.jpg)](https://www.youtube.com/watch?v=cFraCrZCjkM)
