@@ -4,6 +4,7 @@
 &nbsp;물론 대규모 사용자를 고려한 서버 프로그램이라면 안정성과 성능 등 요소를 충족해야 하므로 책에서 배운 소켓 프로그래밍 수준 이상의 네트워크 프로그래밍 기술이 요구된다. 여기서는 지금까지 배운 기본적인 네트워크, 입출력, 스레드, GUI, 자료구조 등 프로그래밍 기술을 총동원해서 다중 클라이언트를 지원하는 멀티 채팅 서버와 클라이언트를 구현할 것이다.<br>
 
 &nbsp;이 자바 메신저는 JUST JAVA(황희정 지음, 한빛아카데미) 책을 바탕으로 하고 있다.
+
 <br>
 
 # 목차
@@ -80,6 +81,7 @@
 &nbsp;자바는 Sun Microsystems에서 개발한 프로그래밍 언어로 태양(sun)과 관련 있는 식(蝕), 개기일식을 의미하는 이클립스를 이름으로 지었다. 이클립스는 Windows, Mac OS X 및 Linux와 같은 주요 운영 체제 어디에서든 제한 없이 사용이 가능하다 보니 다양한 플랫폼의 소프트웨어 개발에 쓰이고 있다.
 
 <img src="https://dora-guide.com/wp-content/uploads/2019/10/eclipse-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-%EC%9D%B4%ED%81%B4%EB%A6%BD%EC%8A%A4-%EC%84%A4%EC%B9%98.png.webp" height=150>
+
 ## 이클립스 설치
 > 설치가이드 www.eclipse.org/downloads/packages/installer
 1. eclipse.org/downloads 접속 후 `Download 64 bit`
@@ -283,9 +285,9 @@ int people = 0;
 ```
 ```java	
 // <GUI 부분>
-MultiChatServer() {  // 생성자 
-    super("Server"); // the title for the frame
-    init();  		 // 화면 구성 메소드
+MultiChatServer() { 	       // 생성자 
+    super("Server"); 	       // the title for the frame
+    init();  	     	       // 화면 구성 메소드
     addButtonActionListener(); // 액션리스너 설정 메소드
 }
 
@@ -306,7 +308,7 @@ private void init() {
     s_msgOut.setFont(new Font("a시네마M", Font.PLAIN, 13));
     s_msgOut.setForeground(Color.WHITE);
     s_msgOut.setBackground(new Color(153, 153, 102));
-    s_msgOut.setLineWrap(true); // 줄바꿈 yes
+    s_msgOut.setLineWrap(true);      // 줄바꿈 yes
     s_msgOut.setWrapStyleWord(true); // 단어 단위 줄바꿈 yes
     s_msgOut.append(" ~ 서버 실행중 ~ \n");
     scrollPane.setViewportView(s_msgOut);
@@ -395,9 +397,9 @@ void msgSendWho(String msg, int send, int rcv) {
 // 각각의 클라이언트 관리를 위한 쓰레드 클래스
 // 1개의 스레드에서는 1개의 일만 처리할 수 있다
 class ChatThread extends Thread {
-    String msg; // 수신 메시지 및 파싱 메시지 처리를 위한 변수 선언
-    Message m = new Message(); // 메시지 객체 생성
-    Gson gson = new Gson(); // Json Parser 초기화
+    String msg; 		// 수신 메시지 및 파싱 메시지 처리를 위한 변수 선언
+    Message m = new Message();  // 메시지 객체 생성
+    Gson gson = new Gson();     // Json Parser 초기화
 
     // 입출력 스트림
     private BufferedReader inMsg = null;
@@ -414,11 +416,12 @@ class ChatThread extends Thread {
             
             // 상태정보가 true 이면 루프를 돌면서 사용자로 부터 수신된 메시지 처리
             while(status) {
-                msg = inMsg.readLine(); // 수신된 메시지를 msg 변수에 저장					
-                m = gson.fromJson(msg,Message.class); // JSON 메시지를 Message 객체로 매핑
+                msg = inMsg.readLine(); 		// 수신된 메시지를 msg 변수에 저장					
+                m = gson.fromJson(msg,Message.class);   // JSON 메시지를 Message 객체로 매핑
                                             
                 // 파싱된 문자열 배열의 두번째 요소 값에 따라 처리
-                if(m.getType().equals("logout")) { // 로그아웃 메시지인 경우
+		// 로그아웃 메시지인 경우
+                if(m.getType().equals("logout")) { 
                     tmpList.remove(m.getId());
                     user = new DefaultListModel<>();
                     for(int i=0; i<tmpList.size(); i++) {
@@ -435,7 +438,8 @@ class ChatThread extends Thread {
                     msgSendAll(gson.toJson(new Message(m.getId(),"","님이 로그아웃했습니다.","server", "all", user, people)));
                     status = false; // 해당 클라이언트 스레드 종료로 인해 status 를 false 로 설정
                 }
-                else if(m.getType().equals("login")) { // 로그인 메시지인 경우
+		// 로그인 메시지인 경우
+                else if(m.getType().equals("login")) { 
                     tmpList.add(people, m.getId());
                     user = new DefaultListModel<>();
                     for(int i=0; i<tmpList.size(); i++) {
@@ -453,7 +457,8 @@ class ChatThread extends Thread {
                     System.out.println(msg);
                     s_msgOut.append("사용자 "+m.getId()+" 로그인했습니다.\n");
                 }
-                else if(m.getType().equals("secret")) { // 귓속말 메시지인 경우
+		// 귓속말 메시지인 경우
+                else if(m.getType().equals("secret")) { 
                     int numS = user.indexOf(m.getId());
                     int numR = user.indexOf(m.getRcvid());
                     //System.out.println("numS : "+numS+"\tnumR : "+numR);
@@ -462,7 +467,8 @@ class ChatThread extends Thread {
                     //System.out.println(msg);
                     s_msgOut.append("(귓속말)" + m.getId() + "→" + m.getRcvid() + " : " + m.getMsg()+"\n");
                 }
-                else { // 그밖의 경우, 일반 메시지인 경우
+		// 그밖의 경우, 일반 메시지인 경우
+                else { 
                     msgSendAll(msg);
                     s_msgOut.append(m.getId() + " : " + m.getMsg() + "\n");
                 }
@@ -563,7 +569,7 @@ public class MultiChatUI extends JFrame {
 	
 	// 채팅
 	private JLabel chatLabel;
-	protected JTextArea c_msgOut; // client print out
+	protected JTextArea c_msgOut;  // client print out
 	protected JTextField msgInput; // enter the txt
 	protected JButton sendButton;
 	
@@ -571,13 +577,13 @@ public class MultiChatUI extends JFrame {
 	protected static String id; 
 	
 	private JLabel userLabel;
-	private JPanel loginPanel; // = idInput + loginButton
-	protected JTextField idInput; // enter the id
+	private JPanel loginPanel; 	 // = idInput + loginButton
+	protected JTextField idInput;    // enter the id
 	protected JButton loginButton;
-	private JPanel logoutPanel; // = idOutLabel + logoutButton
+	private JPanel logoutPanel; 	 // = idOutLabel + logoutButton
 	protected JLabel idOutLabel;
 	protected JButton logoutButton;
-	protected Container tab; // = loginPanel + logoutPanel
+	protected Container tab; 	 // = loginPanel + logoutPanel
 	protected CardLayout cardLayout; // 필요에 따라 패널을 바꿔서 보여준다
 	
 	// 접속자
@@ -804,8 +810,8 @@ Gson gson = new Gson();
 Message m;
     
 boolean status; // 상태 플래그
-Logger logger; // 로거 객체 
-Thread thread; // 메시지 수신 스레드
+Logger logger;  // 로거 객체 
+Thread thread;  // 메시지 수신 스레드
 
 // 메시지 전송 시간, 날짜 객체 생성
 SimpleDateFormat time_sdf = new SimpleDateFormat("a hh:mm");
@@ -830,21 +836,18 @@ public MultiChatController(MultiChatData chatData, MultiChatUI v) {
 ```
 ```java	
 // 어플리케이션 메인 실행 메서드
-public void appMain()
-{
+public void appMain() {
     // 데이터 객체에서 데이터 변화를 처리할 UI 객체 추가
     chatData.addObj(v.c_msgOut);
     
     // <엔터키 이벤트>
-    v.addEnterKeyListener(new KeyListener()
-    {
+    v.addEnterKeyListener(new KeyListener() {
         @Override
         public void keyPressed(KeyEvent e) {
             int key = e.getKeyCode();
             if(key == KeyEvent.VK_ENTER) {
                 Object obj = e.getSource();
-                if (obj == v.idInput || obj == v.loginButton)
-                {
+                if (obj == v.idInput || obj == v.loginButton) {
                     v.id = v.idInput.getText();
                     v.idOutLabel.setText("user : " +v.id);
                     v.cardLayout.show(v.tab, "logout");
@@ -901,10 +904,8 @@ public void appMain()
                     outMsg.flush();
                     v.c_msgOut.setText("--------------------------------- 기록 삭제 --------------------------------\n");
                 }
-                
             }
         }
-
         @Override
         public void keyReleased(KeyEvent e) {}
         @Override
@@ -1086,8 +1087,7 @@ public void run() {
 }
 ```
 ```java	
-public static void main(String[] args)
-{
+public static void main(String[] args) {
     MultiChatController app = new MultiChatController(new MultiChatData(), new MultiChatUI());
     app.appMain();
 }
@@ -1117,13 +1117,13 @@ JSON ex)<br>
 import javax.swing.DefaultListModel;
 
 public class Message {
-	private String id;		// 아이디
-	private String passwd;	// 비밀번호
-	private String msg;		// 채팅 메시지
-	private String type;	// 메시지 유형(로그인, 로그아웃, 메시지, 귓속말 전달)
-	private String rcvid;	// 귓속말 대상
+	private String id;			// 아이디
+	private String passwd;			// 비밀번호
+	private String msg;			// 채팅 메시지
+	private String type;			// 메시지 유형(로그인, 로그아웃, 메시지, 귓속말 전달)
+	private String rcvid;			// 귓속말 대상
 	private DefaultListModel<String> check; // 접속자 리스트
-	private int people;		// 접속자 수
+	private int people;			// 접속자 수
 	
 	public Message(){}
 	
