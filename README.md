@@ -39,6 +39,7 @@
 	4.5 [Message](#message.java)
 5. [실행 환경](#실행-환경)
 6. [실행 결과](#실행-결과)
+<br>
 
 # 환경 구축
 &nbsp;자바 프로그램을 개발하려면 기본적으로 자바 가상머신과 컴파일러, 라이브러리, 런처, 디버거 등 여러 요소로 구성된 JDK(Java Devlopment Kit)가 필요하다. JDK만으로 소스 컴파일과 실행이 가능하지만 소스 편집과 관리, 컴파일, 실행, 라이브러리 고나리 등을 간편하게 하려면 통합 개발 환경이 필요하다. 이클립스는 대표적인 자바 개발 환경이다.
@@ -79,9 +80,6 @@
 &nbsp;자바는 Sun Microsystems에서 개발한 프로그래밍 언어로 태양(sun)과 관련 있는 식(蝕), 개기일식을 의미하는 이클립스를 이름으로 지었다. 이클립스는 Windows, Mac OS X 및 Linux와 같은 주요 운영 체제 어디에서든 제한 없이 사용이 가능하다 보니 다양한 플랫폼의 소프트웨어 개발에 쓰이고 있다.
 
 <img src="https://dora-guide.com/wp-content/uploads/2019/10/eclipse-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-%EC%9D%B4%ED%81%B4%EB%A6%BD%EC%8A%A4-%EC%84%A4%EC%B9%98.png.webp" height=150>
-
-<br>
-
 ## 이클립스 설치
 > 설치가이드 www.eclipse.org/downloads/packages/installer
 1. eclipse.org/downloads 접속 후 `Download 64 bit`
@@ -124,7 +122,7 @@
     <img src="https://dora-guide.com/wp-content/uploads/2019/10/10.png" height=500>
 
 ### 프로젝트 다운로드
-3. 현재 깃허브 페이지에 업로드돼있는 파일을 Git Bash에서 `clone 주소` 하거나 `Download ZIP`을 통해 원하는 드라이브 경로에 저장한 후 압축을 풀어준다. github.com/taeyoung98/JavaMessenger
+3. 현재 깃허브 페이지에 업로드돼있는 파일을 Git Bash에서 `clone 주소` 하거나 <br>`Download ZIP`을 통해 원하는 드라이브 경로에 저장한 후 압축을 풀어준다. github.com/taeyoung98/JavaMessenger
 
     <img src="https://user-images.githubusercontent.com/41332126/72137801-cf27e800-33ce-11ea-9ee8-9d5a680a6a03.png" height=420>
 4. 다시 이클립스로 돌아와서 File > Open Projects form File System...
